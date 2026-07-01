@@ -63,11 +63,22 @@ router.get(
       const page   = Math.max(1, parseInt(req.query['page']   as string) || 1);
       const limit  = Math.min(50, parseInt(req.query['limit'] as string) || 20);
       const offset = (page - 1) * limit;
-      const status = req.query['status'] as string | undefined; // 'active' | 'settled'
+      const status   = req.query['status']    as string | undefined;
+      const marketId = req.query['market_id'] as string | undefined;
 
-      let marketStatusFilter = '';
-      if (status === 'active')  marketStatusFilter = "AND m.status IN ('active','closed')";
-      if (status === 'settled') marketStatusFilter = "AND m.status = 'settled'";
+      // Build WHERE clause with parameterized values (no string interpolation for user input)
+      const filterParams: unknown[] = [userId];
+      const conditions: string[] = ['s.user_id = $1'];
+      let pIdx = 2;
+
+      if (status === 'active')  conditions.push(`m.status IN ('active','closed')`);
+      if (status === 'settled') conditions.push(`m.status = 'settled'`);
+      if (marketId) {
+        conditions.push(`s.market_id = $${pIdx++}`);
+        filterParams.push(marketId);
+      }
+
+      const where = conditions.join(' AND ');
 
       const [dataRes, countRes] = await Promise.all([
         pool.query<Stake & { market_title: string; market_status: string; market_category: string }>(
@@ -78,16 +89,16 @@ router.get(
                   m.reward_pool, m.total_yes, m.total_no
            FROM stakes s
            JOIN markets m ON m.id = s.market_id
-           WHERE s.user_id = $1 ${marketStatusFilter}
+           WHERE ${where}
            ORDER BY s.created_at DESC
-           LIMIT $2 OFFSET $3`,
-          [userId, limit, offset]
+           LIMIT $${pIdx} OFFSET $${pIdx + 1}`,
+          [...filterParams, limit, offset]
         ),
         pool.query<{ count: string }>(
           `SELECT COUNT(*) AS count FROM stakes s
            JOIN markets m ON m.id = s.market_id
-           WHERE s.user_id = $1 ${marketStatusFilter}`,
-          [userId]
+           WHERE ${where}`,
+          filterParams
         ),
       ]);
 

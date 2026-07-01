@@ -5,7 +5,7 @@ import { paymentLimiter } from '../middleware/rateLimit';
 import { Transaction, User } from '../types';
 import { AppError } from '../middleware/errorHandler';
 import pool from '../db/client';
-import { initializeTransaction, resolveAccount, listBanks } from '../lib/paystack/client';
+import { initializePayment, verifyTransaction, resolveAccount, listBanks } from '../lib/flutterwave/client';
 import { generateRef } from '../lib/utils/format';
 
 const router = Router();
@@ -19,21 +19,34 @@ router.get(
     try {
       const userId = req.user!.sub;
 
-      const [userRes, txRes] = await Promise.all([
-        pool.query<Pick<User, 'wallet_balance'>>('SELECT wallet_balance FROM users WHERE id = $1', [userId]),
+      const [userRes, txRes, dailyRes] = await Promise.all([
+        pool.query<Pick<User, 'wallet_balance' | 'daily_stake_limit'>>(
+          'SELECT wallet_balance, daily_stake_limit FROM users WHERE id = $1', [userId]
+        ),
         pool.query<Transaction>(
           `SELECT id, type, amount, status, ref, market_id, created_at
            FROM transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT 10`,
+          [userId]
+        ),
+        pool.query<{ daily_staked: string }>(
+          `SELECT COALESCE(SUM(s.amount), 0) AS daily_staked
+           FROM stakes s
+           JOIN transactions t ON t.stake_id = s.id
+           WHERE s.user_id = $1 AND t.created_at >= CURRENT_DATE AND t.status = 'confirmed'`,
           [userId]
         ),
       ]);
 
       if (userRes.rows.length === 0) throw new AppError(404, 'User not found');
 
+      const user = userRes.rows[0];
+
       res.json({
         data: {
-          balance:      userRes.rows[0].wallet_balance,
-          transactions: txRes.rows,
+          balance:            user.wallet_balance,
+          daily_stake_limit:  user.daily_stake_limit,
+          daily_staked_today: dailyRes.rows[0].daily_staked,
+          transactions:       txRes.rows,
         },
       });
     } catch (err) {
@@ -107,7 +120,7 @@ router.get(
 );
 
 // ─── POST /api/me/deposit/initiate ───────────────────────────────────────────
-// Calls Paystack to create a payment link. Client opens Paystack Popup with the URL.
+// Calls Flutterwave to create a hosted checkout link. Client redirects/opens the link.
 router.post(
   '/me/deposit/initiate',
   requireAuth as never,
@@ -124,8 +137,10 @@ router.post(
         throw new AppError(400, 'Maximum single deposit is ₦5,000,000');
       }
 
-      // Fetch user email for Paystack
-      const { rows } = await pool.query<Pick<User, 'email'>>('SELECT email FROM users WHERE id = $1', [userId]);
+      // Fetch user email + display name for Flutterwave
+      const { rows } = await pool.query<Pick<User, 'email' | 'display_name'>>(
+        'SELECT email, display_name FROM users WHERE id = $1', [userId]
+      );
       if (!rows[0]?.email) throw new AppError(400, 'Account email is required to deposit');
 
       const reference = generateRef('dep');
@@ -133,27 +148,29 @@ router.post(
       // Create pending transaction record first (idempotency anchor)
       await pool.query(
         `INSERT INTO transactions (user_id, type, amount, balance_before, balance_after, status, ref, provider, metadata)
-         SELECT $1, 'deposit', $2, wallet_balance, wallet_balance, 'pending', $3, 'paystack',
+         SELECT $1, 'deposit', $2, wallet_balance, wallet_balance, 'pending', $3, 'flutterwave',
                 jsonb_build_object('initiated_at', NOW())
          FROM users WHERE id = $1`,
         [userId, amount, reference]
       );
 
-      const paystackRes = await initializeTransaction({
-        email:     rows[0].email,
+      const flwRes = await initializePayment({
+        email:        rows[0].email,
+        name:         rows[0].display_name ?? 'NoCut.ng User',
         amount,
-        reference,
-        metadata:  { user_id: userId },
+        tx_ref:       reference,
+        redirect_url: `${process.env.APP_URL}/api/me/deposit/callback`,
+        metadata:     { user_id: userId },
       });
 
-      if (!paystackRes.status) {
+      if (flwRes.status !== 'success') {
         throw new AppError(502, 'Payment gateway error. Please try again.');
       }
 
       res.json({
         data: {
-          authorization_url: paystackRes.data.authorization_url,
-          reference:         paystackRes.data.reference,
+          authorization_url: flwRes.data.link,
+          reference,
         },
       });
     } catch (err) {
@@ -161,6 +178,73 @@ router.post(
     }
   }
 );
+
+// ─── GET /api/me/deposit/callback ────────────────────────────────────────────
+// Flutterwave redirects the user's browser here after hosted checkout completes.
+// Public route (no auth header on a browser redirect) — identifies the user via
+// the tx_ref on the pending transaction. Verifies server-side via the Flutterwave
+// API rather than trusting the query string, as a second confirmation path
+// alongside the webhook (credit_wallet() is idempotent, so whichever fires first wins).
+router.get('/me/deposit/callback', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { status, tx_ref, transaction_id } = req.query as Record<string, string>;
+
+    if (!tx_ref) throw new AppError(400, 'Missing transaction reference');
+
+    if (status !== 'successful' || !transaction_id) {
+      await pool.query(
+        `UPDATE transactions SET status = 'failed', updated_at = NOW() WHERE ref = $1 AND status = 'pending'`,
+        [tx_ref]
+      );
+      res.json({ data: { status: 'failed', message: 'Payment was not completed.' } });
+      return;
+    }
+
+    const { rows: txRows } = await pool.query<{ id: string; user_id: string; amount: string; status: string }>(
+      `SELECT id, user_id, amount, status FROM transactions WHERE ref = $1`,
+      [tx_ref]
+    );
+    if (!txRows[0]) throw new AppError(404, 'Transaction not found');
+
+    if (txRows[0].status === 'confirmed') {
+      res.json({ data: { status: 'success', message: 'Deposit already confirmed.' } });
+      return;
+    }
+
+    const verified = await verifyTransaction(transaction_id);
+    const v = verified.data;
+
+    if (
+      verified.status !== 'success' ||
+      v.status !== 'successful' ||
+      v.tx_ref !== tx_ref ||
+      v.currency !== 'NGN' ||
+      Number(v.amount) !== Number(txRows[0].amount)
+    ) {
+      throw new AppError(400, 'Payment verification failed. Please contact support if you were charged.');
+    }
+
+    try {
+      await pool.query(
+        `SELECT credit_wallet($1, $2, $3, $4, $5)`,
+        [
+          txRows[0].user_id,
+          v.amount,
+          'flutterwave',
+          tx_ref,
+          JSON.stringify({ flw_ref: v.flw_ref, flw_transaction_id: v.id, customer_email: v.customer.email }),
+        ]
+      );
+    } catch (creditErr) {
+      // The webhook may have credited concurrently — that's success, not an error.
+      if (!(creditErr as Error).message?.includes('already_processed')) throw creditErr;
+    }
+
+    res.json({ data: { status: 'success', message: 'Deposit confirmed. Your wallet has been credited.' } });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ─── POST /api/me/withdraw ────────────────────────────────────────────────────
 // Queues a withdrawal request. Wallet debit happens when admin approves.
@@ -202,7 +286,7 @@ router.post(
 
         const txRes = await client.query<{ id: string }>(
           `INSERT INTO transactions (user_id, type, amount, balance_before, balance_after, status, ref, provider)
-           SELECT $1, 'withdrawal', $2, wallet_balance, wallet_balance - $2, 'pending', $3, 'paystack'
+           SELECT $1, 'withdrawal', $2, wallet_balance, wallet_balance - $2, 'pending', $3, 'flutterwave'
            FROM users WHERE id = $1
            RETURNING id`,
           [userId, amount, ref]
@@ -257,8 +341,8 @@ router.get(
         throw new AppError(400, 'account_number and bank_code are required');
       }
 
-      const result = await resolveAccount({ account_number, bank_code });
-      if (!result.status) {
+      const result = await resolveAccount({ account_number, account_bank: bank_code });
+      if (result.status !== 'success') {
         throw new AppError(400, 'Could not verify account details. Please check and try again.');
       }
 

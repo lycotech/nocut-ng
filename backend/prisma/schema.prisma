@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                  String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email               String?             @unique
+  phone               String?             @unique
+  displayName         String?             @map("display_name")
+  avatarUrl           String?             @map("avatar_url")
+  walletBalance       Decimal             @default(0.00) @map("wallet_balance") @db.Decimal(12, 2)
+  kycStatus           String              @default("unverified") @map("kyc_status")
+  kycBvn              String?             @map("kyc_bvn")
+  kycNin              String?             @map("kyc_nin")
+  kycVerifiedAt       DateTime?           @map("kyc_verified_at") @db.Timestamptz(6)
+  dailyStakeLimit     Decimal             @default(50000.00) @map("daily_stake_limit") @db.Decimal(12, 2)
+  selfExcluded        Boolean             @default(false) @map("self_excluded")
+  selfExcludedUntil   DateTime?           @map("self_excluded_until") @db.Timestamptz(6)
+  isAdmin             Boolean             @default(false) @map("is_admin")
+  referralCode        String?             @unique @map("referral_code")
+  referredBy          String?             @map("referred_by") @db.Uuid
+  ageConfirmed        Boolean             @default(false) @map("age_confirmed")
+  metadata            Json                @default("{}")
+  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  adminLogEntries     AdminLog[]
+  marketsCreated      Market[]            @relation("MarketCreator")
+  referralsReceived   Referral[]          @relation("Referee")
+  referralsSent       Referral[]          @relation("Referrer")
+  settlementsHandled  Settlement[]
+  stakes              Stake[]
+  transactions        Transaction[]
+  referredByUser      User?               @relation("Referrals", fields: [referredBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referredUsers       User[]              @relation("Referrals")
+  withdrawalsApproved WithdrawalRequest[] @relation("ApprovedWithdrawals")
+  withdrawalRequests  WithdrawalRequest[] @relation("UserWithdrawals")
+
+  @@map("users")
+}
+
+model Market {
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title              String
+  description        String?
+  category           String
+  rewardPool         Decimal       @map("reward_pool") @db.Decimal(12, 2)
+  totalYes           Decimal       @default(0.00) @map("total_yes") @db.Decimal(12, 2)
+  totalNo            Decimal       @default(0.00) @map("total_no") @db.Decimal(12, 2)
+  status             String        @default("draft")
+  resolutionCriteria String?       @map("resolution_criteria")
+  resolutionSource   String?       @map("resolution_source")
+  winningSide        String?       @map("winning_side")
+  closesAt           DateTime?     @map("closes_at") @db.Timestamptz(6)
+  resolvesAt         DateTime?     @map("resolves_at") @db.Timestamptz(6)
+  closedAt           DateTime?     @map("closed_at") @db.Timestamptz(6)
+  settledAt          DateTime?     @map("settled_at") @db.Timestamptz(6)
+  createdBy          String?       @map("created_by") @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  creator            User?         @relation("MarketCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  settlement         Settlement?
+  stakes             Stake[]
+  transactions       Transaction[]
+
+  @@index([category], map: "idx_markets_category")
+  @@index([closesAt], map: "idx_markets_closes_at")
+  @@index([status], map: "idx_markets_status")
+  @@map("markets")
+}
+
+model Stake {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String        @map("user_id") @db.Uuid
+  marketId       String        @map("market_id") @db.Uuid
+  side           String
+  amount         Decimal       @db.Decimal(12, 2)
+  expectedPayout Decimal       @map("expected_payout") @db.Decimal(12, 2)
+  actualPayout   Decimal?      @map("actual_payout") @db.Decimal(12, 2)
+  isWinner       Boolean?      @map("is_winner")
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  market         Market        @relation(fields: [marketId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user           User          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  transactions   Transaction[]
+
+  @@index([marketId], map: "idx_stakes_market_id")
+  @@index([userId], map: "idx_stakes_user_id")
+  @@map("stakes")
+}
+
+model Transaction {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String              @map("user_id") @db.Uuid
+  type              String
+  amount            Decimal             @db.Decimal(12, 2)
+  balanceBefore     Decimal             @map("balance_before") @db.Decimal(12, 2)
+  balanceAfter      Decimal             @map("balance_after") @db.Decimal(12, 2)
+  status            String              @default("pending")
+  ref               String?             @unique
+  marketId          String?             @map("market_id") @db.Uuid
+  stakeId           String?             @map("stake_id") @db.Uuid
+  provider          String?
+  providerRef       String?             @map("provider_ref")
+  metadata          Json                @default("{}")
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  market            Market?             @relation(fields: [marketId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  stake             Stake?              @relation(fields: [stakeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user              User                @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  withdrawalRequest WithdrawalRequest[] @relation("WithdrawalTransaction")
+
+  @@index([createdAt], map: "idx_transactions_date")
+  @@index([providerRef], map: "idx_transactions_ref")
+  @@index([userId], map: "idx_transactions_user")
+  @@map("transactions")
+}
+
+model Settlement {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  marketId        String   @unique @map("market_id") @db.Uuid
+  winningSide     String   @map("winning_side")
+  totalWinners    Int      @map("total_winners")
+  totalStaked     Decimal  @map("total_staked") @db.Decimal(12, 2)
+  rewardPool      Decimal  @map("reward_pool") @db.Decimal(12, 2)
+  platformMargin  Decimal  @map("platform_margin") @db.Decimal(12, 2)
+  poolDistributed Decimal  @map("pool_distributed") @db.Decimal(12, 2)
+  settledBy       String?  @map("settled_by") @db.Uuid
+  resolutionNote  String?  @map("resolution_note")
+  settledAt       DateTime @default(now()) @map("settled_at") @db.Timestamptz(6)
+  market          Market   @relation(fields: [marketId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  settler         User?    @relation(fields: [settledBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("settlements")
+}
+
+model AdminLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId    String   @map("admin_id") @db.Uuid
+  action     String
+  entityType String?  @map("entity_type")
+  entityId   String?  @map("entity_id") @db.Uuid
+  notes      String?
+  metadata   Json     @default("{}")
+  ipAddress  String?  @map("ip_address")
+  timestamp  DateTime @default(now()) @db.Timestamptz(6)
+  admin      User     @relation(fields: [adminId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([entityId], map: "idx_admin_log_entity")
+  @@map("admin_log")
+}
+
+model WithdrawalRequest {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String       @map("user_id") @db.Uuid
+  amount          Decimal      @db.Decimal(12, 2)
+  bankCode        String       @map("bank_code")
+  accountNumber   String       @map("account_number")
+  accountName     String       @map("account_name")
+  status          String       @default("pending")
+  approvedBy      String?      @map("approved_by") @db.Uuid
+  transactionId   String?      @map("transaction_id") @db.Uuid
+  rejectionReason String?      @map("rejection_reason")
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  approver        User?        @relation("ApprovedWithdrawals", fields: [approvedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  transaction     Transaction? @relation("WithdrawalTransaction", fields: [transactionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user            User         @relation("UserWithdrawals", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("withdrawal_requests")
+}
+
+model Referral {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referrerId  String   @map("referrer_id") @db.Uuid
+  refereeId   String   @map("referee_id") @db.Uuid
+  bonusAmount Decimal? @map("bonus_amount") @db.Decimal(12, 2)
+  bonusPaid   Boolean  @default(false) @map("bonus_paid")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  referee     User     @relation("Referee", fields: [refereeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referrer    User     @relation("Referrer", fields: [referrerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("referrals")
+}

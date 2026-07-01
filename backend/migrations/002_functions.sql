@@ -33,14 +33,20 @@ BEGIN
   SELECT * INTO v_user   FROM users   WHERE id = p_user_id   FOR UPDATE;
   SELECT * INTO v_market FROM markets WHERE id = p_market_id FOR UPDATE;
 
-  -- ── Validation (fail-fast, in priority order) ──────────────────────────────
-  IF v_market.status != 'active'      THEN RAISE EXCEPTION 'market_not_active';      END IF;
+  -- ── Validation (fail-fast — order matches CLAUDE.md Section 15) ──────────────
+  -- 1. age gate
   IF NOT v_user.age_confirmed          THEN RAISE EXCEPTION 'age_not_confirmed';      END IF;
+  -- 2. KYC
   IF v_user.kyc_status != 'verified'  THEN RAISE EXCEPTION 'kyc_not_verified';       END IF;
+  -- 3. self-exclusion
   IF v_user.self_excluded             THEN RAISE EXCEPTION 'user_self_excluded';     END IF;
   IF v_user.self_excluded_until IS NOT NULL AND v_user.self_excluded_until > NOW()
                                        THEN RAISE EXCEPTION 'user_self_excluded';     END IF;
+  -- 4. market must be active
+  IF v_market.status != 'active'      THEN RAISE EXCEPTION 'market_not_active';      END IF;
+  -- 5. amount must be positive
   IF p_amount <= 0                     THEN RAISE EXCEPTION 'invalid_amount';         END IF;
+  -- 6. sufficient wallet balance
   IF v_user.wallet_balance < p_amount  THEN RAISE EXCEPTION 'insufficient_balance';  END IF;
 
   -- Daily stake limit check
@@ -215,39 +221,64 @@ $$ LANGUAGE plpgsql;
 
 -- ─── CREDIT WALLET (ATOMIC) ───────────────────────────────────────────────────
 -- Used by the Paystack webhook handler for deposits.
+-- Confirms the pending transaction created by deposit/initiate rather than
+-- inserting a duplicate. Falls back to INSERT only if no pending tx exists
+-- (handles rare case where webhook fires before the pending tx is written).
 CREATE OR REPLACE FUNCTION credit_wallet(
-  p_user_id     UUID,
-  p_amount      NUMERIC,
-  p_provider    TEXT,
+  p_user_id      UUID,
+  p_amount       NUMERIC,
+  p_provider     TEXT,
   p_provider_ref TEXT,
-  p_metadata    JSONB DEFAULT '{}'
+  p_metadata     JSONB DEFAULT '{}'
 ) RETURNS JSONB AS $$
 DECLARE
-  v_user       users%ROWTYPE;
-  v_tx_id      UUID;
+  v_user   users%ROWTYPE;
+  v_tx_id  UUID;
 BEGIN
   SELECT * INTO v_user FROM users WHERE id = p_user_id FOR UPDATE;
 
-  -- Idempotency: reject if this provider_ref was already processed
-  IF EXISTS (SELECT 1 FROM transactions WHERE provider_ref = p_provider_ref AND status = 'confirmed') THEN
+  -- Idempotency: reject if this provider_ref was already confirmed
+  IF EXISTS (
+    SELECT 1 FROM transactions
+    WHERE provider_ref = p_provider_ref AND status = 'confirmed'
+  ) THEN
     RAISE EXCEPTION 'already_processed';
   END IF;
 
+  -- Credit wallet
   UPDATE users
   SET wallet_balance = wallet_balance + p_amount, updated_at = NOW()
   WHERE id = p_user_id;
 
-  INSERT INTO transactions (
-    user_id, type, amount, balance_before, balance_after,
-    status, provider, provider_ref, ref, metadata
-  ) VALUES (
-    p_user_id, 'deposit', p_amount,
-    v_user.wallet_balance,
-    v_user.wallet_balance + p_amount,
-    'confirmed', p_provider, p_provider_ref,
-    'dep_' || p_provider_ref,
-    p_metadata
-  ) RETURNING id INTO v_tx_id;
+  -- Try to UPDATE the pending transaction created by deposit/initiate
+  -- (matched by ref = p_provider_ref, status = 'pending', same user)
+  UPDATE transactions
+  SET status         = 'confirmed',
+      balance_before = v_user.wallet_balance,
+      balance_after  = v_user.wallet_balance + p_amount,
+      provider       = p_provider,
+      provider_ref   = p_provider_ref,
+      metadata       = p_metadata,
+      updated_at     = NOW()
+  WHERE ref      = p_provider_ref
+    AND user_id  = p_user_id
+    AND status   = 'pending'
+  RETURNING id INTO v_tx_id;
+
+  -- Fallback: INSERT if no pending transaction exists
+  IF v_tx_id IS NULL THEN
+    INSERT INTO transactions (
+      user_id, type, amount, balance_before, balance_after,
+      status, provider, provider_ref, ref, metadata
+    ) VALUES (
+      p_user_id, 'deposit', p_amount,
+      v_user.wallet_balance,
+      v_user.wallet_balance + p_amount,
+      'confirmed', p_provider, p_provider_ref,
+      'dep_' || p_provider_ref,
+      p_metadata
+    ) RETURNING id INTO v_tx_id;
+  END IF;
 
   RETURN jsonb_build_object(
     'transaction_id', v_tx_id,

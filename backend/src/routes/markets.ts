@@ -151,9 +151,13 @@ router.get('/:id/payout-preview', async (req: Request, res: Response, next: Next
   }
 });
 
+export default router;
+
 // ─── GET /api/leaderboard ─────────────────────────────────────────────────────
 // Public. Top 50 users by profit this week (settled payouts minus stakes).
-router.get('/leaderboard', async (_req: Request, res: Response, next: NextFunction) => {
+// Mounted separately at /api/leaderboard (not under /api/markets) — see index.ts.
+export const leaderboardRouter = Router();
+leaderboardRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const { rows } = await pool.query<{
       display_name: string;

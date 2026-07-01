@@ -14,5 +14,9 @@ export function verifyPaystackSignature(rawBody: Buffer, signature: string): boo
     .update(rawBody)
     .digest('hex');
 
-  return hash === signature;
+  const hashBuf = Buffer.from(hash, 'hex');
+  const sigBuf  = Buffer.from(signature, 'hex');
+  if (hashBuf.length !== sigBuf.length) return false;
+
+  return crypto.timingSafeEqual(hashBuf, sigBuf);
 }

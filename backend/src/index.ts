@@ -5,7 +5,9 @@ import dotenv from 'dotenv';
 
 import { generalLimiter } from './middleware/rateLimit';
 import { errorHandler } from './middleware/errorHandler';
-import marketsRouter  from './routes/markets';
+import authRouter     from './routes/auth';
+import meRouter       from './routes/me';
+import marketsRouter, { leaderboardRouter } from './routes/markets';
 import stakesRouter   from './routes/stakes';
 import walletRouter   from './routes/wallet';
 import webhooksRouter from './routes/webhooks';
@@ -50,7 +52,10 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/api', generalLimiter);
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
+app.use('/api/auth',         authRouter);
+app.use('/api/me',           meRouter);       // /api/me, /api/me/self-exclude, /api/me/kyc, /api/me/referral
 app.use('/api/markets',      marketsRouter);
+app.use('/api/leaderboard',  leaderboardRouter);
 app.use('/api/me/stakes',    stakesRouter);
 app.use('/api',              walletRouter);   // /api/me/wallet, /api/me/deposit, /api/me/withdraw, /api/banks
 app.use('/api/webhooks',     webhooksRouter);

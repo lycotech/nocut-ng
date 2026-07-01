@@ -159,3 +159,41 @@ export interface PaystackWebhookEvent {
   event: string;
   data: PaystackChargeData;
 }
+
+// ─── Flutterwave types ─────────────────────────────────────────────────────────
+
+export interface FlutterwaveInitializeResponse {
+  status: 'success' | 'error';
+  message: string;
+  data: {
+    link: string;
+  };
+}
+
+export interface FlutterwaveTransactionData {
+  id: number;
+  tx_ref: string;
+  flw_ref: string;
+  amount: number;            // in NAIRA (not kobo)
+  currency: string;
+  status: string;            // 'successful' | 'failed' | ...
+  customer: {
+    id: number;
+    email: string;
+    name: string;
+  };
+  meta?: Record<string, unknown>;
+}
+
+export interface FlutterwaveTransferData {
+  id: number;
+  reference: string;
+  status: string;            // 'SUCCESSFUL' | 'FAILED' | ...
+  amount: number;
+  complete_message?: string;
+}
+
+export interface FlutterwaveWebhookEvent {
+  event: string;             // 'charge.completed' | 'transfer.completed'
+  data: FlutterwaveTransactionData & Partial<FlutterwaveTransferData>;
+}
