@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NOCUT.NG | Knowledge Market</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#0B0F1A",
+                    "secondary-container": "#00a572",
+                    "primary-container": "#10B981",
+                    "text-muted": "#4B5563",
+                    "inverse-on-surface": "#2a313d",
+                    "surface-bright": "#323946",
+                    "on-tertiary-container": "#8d0012",
+                    "surface-container": "#19202b",
+                    "outline": "#a08e7a",
+                    "inverse-primary": "#855300",
+                    "surface-container-high": "#232a36",
+                    "surface": "#111827",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-surface": "#dce2f3",
+                    "primary": "#10B981",
+                    "on-primary": "#003824",
+                    "on-surface-variant": "#d8c3ad",
+                    "on-primary-fixed": "#002113",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-error": "#690005",
+                    "surface-container-low": "#151c27",
+                    "surface-container-lowest": "#070e19",
+                    "on-tertiary": "#68000a",
+                    "success": "#10B981",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#005236",
+                    "surface-variant": "#2e3541",
+                    "on-secondary-container": "#00311f",
+                    "error-container": "#93000a",
+                    "surface-container-highest": "#2e3541",
+                    "input-surface": "#1F2937",
+                    "tertiary-fixed": "#ffdad7",
+                    "border": "rgba(255, 255, 255, 0.07)",
+                    "outline-variant": "#534434",
+                    "inverse-surface": "#dce2f3",
+                    "secondary": "#4edea3",
+                    "on-primary-container": "#002113",
+                    "on-secondary-fixed": "#002113",
+                    "primary-fixed-dim": "#4edea3",
+                    "on-secondary": "#003824",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "text-primary": "#F0F2F8",
+                    "tertiary": "#ffbcb7",
+                    "on-background": "#dce2f3",
+                    "error": "#EF4444",
+                    "secondary-fixed": "#6ffbbe",
+                    "tertiary-container": "#ff938c",
+                    "on-tertiary-fixed": "#410004",
+                    "text-secondary": "#6B7280",
+                    "primary-fixed": "#6ffbbe",
+                    "surface-dim": "#0c141f",
+                    "surface-tint": "#10B981",
+                    "tertiary-fixed-dim": "#ffb3ad"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xl": "40px",
+                    "unit": "4px",
+                    "xs": "4px",
+                    "container-max": "1280px",
+                    "gutter": "20px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xxl": "64px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #0B0F1A;
+        color: #dce2f3;
+        -webkit-font-smoothing: antialiased;
+        font-family: 'Inter', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(17, 24, 39, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopNavBar -->
+<nav class="w-full top-0 sticky z-50 border-b border-border bg-background">
+<div class="flex justify-between items-center w-full px-lg py-md max-w-container-max mx-auto">
+<div class="flex items-center gap-xl">
+<img alt="NOCUT.NG" class="h-8" src="data:image/png;base64,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"/>
+<div class="hidden md:flex gap-lg items-center">
+<a class="text-primary-container dark:text-primary border-b-2 border-primary-container dark:border-primary pb-1 font-label-md text-label-md font-medium" href="#">Markets</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary-container dark:hover:text-primary transition-colors font-label-md text-label-md font-medium" href="#">Leaderboard</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary-container dark:hover:text-primary transition-colors font-label-md text-label-md font-medium" href="#">How it works</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="hidden md:block px-md py-sm font-label-md text-label-md text-on-surface hover:text-primary-container transition-colors font-medium">Log in</button>
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-lg py-sm rounded-lg font-bold hover:scale-[0.98] transition-transform">Sign up</button>
+</div>
+</div>
+</nav>
+<main class="flex flex-col">
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-xxl pb-xl border-b border-border">
+<!-- Decorative background elements -->
+<div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-primary-container/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[400px] h-[400px] bg-secondary-container/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="max-w-container-max mx-auto px-lg relative z-10 flex flex-col items-center text-center">
+<div class="inline-flex items-center gap-sm px-md py-xs bg-primary-container/10 border border-primary-container/20 rounded-full mb-lg">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-primary-container uppercase tracking-widest font-normal">LIVE MARKETS</span>
+</div>
+<h1 class="font-display-lg text-display-lg md:text-display-lg text-text-primary mb-md max-w-4xl font-bold">
+                    Stake your knowledge. <span class="text-primary-container">Earn your edge.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-text-secondary mb-xl max-w-2xl font-normal">
+                    Take positions on sports, politics, and finance. The earlier you stake, the more you earn in Nigeria's premier prediction market.
+                </p>
+<div class="flex flex-col md:flex-row items-center gap-md mb-xxl">
+<button class="w-full md:w-auto bg-primary-container text-on-primary-container px-xxl py-md rounded-lg font-bold uppercase tracking-wide hover:brightness-110 active:scale-95 transition-all">
+                        Start Staking
+                    </button>
+<button class="w-full md:w-auto border border-text-secondary text-text-primary px-xxl py-md rounded-lg font-bold uppercase tracking-wide hover:bg-surface-variant active:scale-95 transition-all">
+                        See How It Works
+                    </button>
+</div>
+<!-- Stats Bar -->
+<div class="w-full max-w-4xl glass-card rounded-xl p-md flex flex-wrap justify-between items-center gap-lg">
+<div class="flex-1 min-w-[150px]">
+<p class="font-label-sm text-label-sm text-text-muted mb-xs uppercase font-normal">Staked Today</p>
+<p class="font-headline-sm text-headline-sm text-text-primary font-semibold">₦4.2M</p>
+</div>
+<div class="w-[1px] h-8 bg-border hidden md:block"></div>
+<div class="flex-1 min-w-[150px]">
+<p class="font-label-sm text-label-sm text-text-muted mb-xs uppercase font-normal">Active Markets</p>
+<p class="font-headline-sm text-headline-sm text-text-primary font-semibold">18</p>
+</div>
+<div class="w-[1px] h-8 bg-border hidden md:block"></div>
+<div class="flex-1 min-w-[150px]">
+<p class="font-label-sm text-label-sm text-text-muted mb-xs uppercase font-normal">Positions Taken</p>
+<p class="font-headline-sm text-headline-sm text-text-primary font-semibold">3,847</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Markets Feed -->
+<section class="max-w-container-max mx-auto w-full px-lg py-xxl">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-lg mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-text-primary mb-sm font-bold">Active Markets</h2>
+<p class="font-body-md text-text-secondary font-normal">Discover trending predictions across the continent.</p>
+</div>
+<!-- Filter Tabs -->
+<div class="flex items-center gap-xs overflow-x-auto no-scrollbar pb-xs">
+<button class="px-lg py-sm bg-primary-container text-on-primary-container rounded-full font-label-md text-label-md font-medium">All</button>
+<button class="px-lg py-sm bg-surface-container border border-border text-on-surface hover:border-primary-container transition-colors rounded-full font-label-md text-label-md font-medium">Football</button>
+<button class="px-lg py-sm bg-surface-container border border-border text-on-surface hover:border-primary-container transition-colors rounded-full font-label-md text-label-md font-medium">Politics</button>
+<button class="px-lg py-sm bg-surface-container border border-border text-on-surface hover:border-primary-container transition-colors rounded-full font-label-md text-label-md font-medium">Finance</button>
+<button class="px-lg py-sm bg-surface-container border border-border text-on-surface hover:border-primary-container transition-colors rounded-full font-label-md text-label-md font-medium">Entertainment</button>
+</div>
+</div>
+<!-- 2-column Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Card 1: Football -->
+<div class="surface glass-card rounded-xl p-lg flex flex-col gap-md hover:border-primary-container/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<span class="px-sm py-xs bg-primary-container/10 text-primary-container rounded font-label-sm text-label-sm uppercase tracking-wider font-normal">Football</span>
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="font-label-sm text-label-sm font-normal">4h left</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-tight h-14 overflow-hidden font-semibold">Will Nigeria win their next AFCON qualifier?</h3>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-label-sm mb-xs font-normal">
+<span class="text-success font-semibold">YES 65%</span>
+<span class="text-error font-semibold">NO 35%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 65%"></div>
+<div class="w-[2px] h-full bg-background"></div>
+<div class="h-full bg-error" style="width: 35%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md mt-sm">
+<button class="flex flex-col items-center py-md rounded-lg bg-success/15 border border-success/30 hover:bg-success/25 transition-all">
+<span class="font-label-sm text-label-sm text-success uppercase font-normal">YES</span>
+<span class="font-label-md text-label-md text-success font-bold">₦1,250 expected</span>
+</button>
+<button class="flex flex-col items-center py-md rounded-lg bg-error/15 border border-error/30 hover:bg-error/25 transition-all">
+<span class="font-label-sm text-label-sm text-error uppercase font-normal">NO</span>
+<span class="font-label-md text-label-md text-error font-bold">₦2,100 expected</span>
+</button>
+</div>
+<div class="flex items-center gap-xs mt-auto pt-md border-t border-border">
+<span class="material-symbols-outlined text-[18px] text-text-muted">payments</span>
+<span class="font-label-sm text-label-sm text-text-muted font-normal">Pool size: <span class="text-text-primary font-semibold">₦850k</span></span>
+</div>
+</div>
+<!-- Card 2: Politics -->
+<div class="surface glass-card rounded-xl p-lg flex flex-col gap-md hover:border-primary-container/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<span class="px-sm py-xs bg-secondary-fixed-dim/10 text-secondary-fixed-dim rounded font-label-sm text-label-sm uppercase tracking-wider font-normal">Politics</span>
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="font-label-sm text-label-sm font-normal">2d left</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-tight h-14 overflow-hidden font-semibold">Will the new economic policy pass the Senate?</h3>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-label-sm mb-xs font-normal">
+<span class="text-success font-semibold">YES 40%</span>
+<span class="text-error font-semibold">NO 60%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 40%"></div>
+<div class="w-[2px] h-full bg-background"></div>
+<div class="h-full bg-error" style="width: 60%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md mt-sm">
+<button class="flex flex-col items-center py-md rounded-lg bg-success/15 border border-success/30 hover:bg-success/25 transition-all">
+<span class="font-label-sm text-label-sm text-success uppercase font-normal">YES</span>
+<span class="font-label-md text-label-md text-success font-bold">₦2,500 expected</span>
+</button>
+<button class="flex flex-col items-center py-md rounded-lg bg-error/15 border border-error/30 hover:bg-error/25 transition-all">
+<span class="font-label-sm text-label-sm text-error uppercase font-normal">NO</span>
+<span class="font-label-md text-label-md text-error font-bold">₦1,400 expected</span>
+</button>
+</div>
+<div class="flex items-center gap-xs mt-auto pt-md border-t border-border">
+<span class="material-symbols-outlined text-[18px] text-text-muted">payments</span>
+<span class="font-label-sm text-label-sm text-text-muted font-normal">Pool size: <span class="text-text-primary font-semibold">₦1.2M</span></span>
+</div>
+</div>
+<!-- Card 3: Finance -->
+<div class="surface glass-card rounded-xl p-lg flex flex-col gap-md hover:border-primary-container/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<span class="px-sm py-xs bg-tertiary/10 text-tertiary rounded font-label-sm text-label-sm uppercase tracking-wider font-normal">Finance</span>
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="font-label-sm text-label-sm font-normal">12h left</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-tight h-14 overflow-hidden font-semibold">Will Naira appreciate below ₦1,500/$ by Friday?</h3>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-label-sm mb-xs font-normal">
+<span class="text-success font-semibold">YES 55%</span>
+<span class="text-error font-semibold">NO 45%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 55%"></div>
+<div class="w-[2px] h-full bg-background"></div>
+<div class="h-full bg-error" style="width: 45%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md mt-sm">
+<button class="flex flex-col items-center py-md rounded-lg bg-success/15 border border-success/30 hover:bg-success/25 transition-all">
+<span class="font-label-sm text-label-sm text-success uppercase font-normal">YES</span>
+<span class="font-label-md text-label-md text-success font-bold">₦1,800 expected</span>
+</button>
+<button class="flex flex-col items-center py-md rounded-lg bg-error/15 border border-error/30 hover:bg-error/25 transition-all">
+<span class="font-label-sm text-label-sm text-error uppercase font-normal">NO</span>
+<span class="font-label-md text-label-md text-error font-bold">₦1,950 expected</span>
+</button>
+</div>
+<div class="flex items-center gap-xs mt-auto pt-md border-t border-border">
+<span class="material-symbols-outlined text-[18px] text-text-muted">payments</span>
+<span class="font-label-sm text-label-sm text-text-muted font-normal">Pool size: <span class="text-text-primary font-semibold">₦450k</span></span>
+</div>
+</div>
+<!-- Card 4: Entertainment -->
+<div class="surface glass-card rounded-xl p-lg flex flex-col gap-md hover:border-primary-container/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<span class="px-sm py-xs bg-tertiary-container/10 text-tertiary-container rounded font-label-sm text-label-sm uppercase tracking-wider font-normal">Entertainment</span>
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="font-label-sm text-label-sm font-normal">5d left</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary leading-tight h-14 overflow-hidden font-semibold">Will 'The Wedding Party 3' gross ₦100M in opening week?</h3>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-label-sm mb-xs font-normal">
+<span class="text-success font-semibold">YES 70%</span>
+<span class="text-error font-semibold">NO 30%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 70%"></div>
+<div class="w-[2px] h-full bg-background"></div>
+<div class="h-full bg-error" style="width: 30%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md mt-sm">
+<button class="flex flex-col items-center py-md rounded-lg bg-success/15 border border-success/30 hover:bg-success/25 transition-all">
+<span class="font-label-sm text-label-sm text-success uppercase font-normal">YES</span>
+<span class="font-label-md text-label-md text-success font-bold">₦1,100 expected</span>
+</button>
+<button class="flex flex-col items-center py-md rounded-lg bg-error/15 border border-error/30 hover:bg-error/25 transition-all">
+<span class="font-label-sm text-label-sm text-error uppercase font-normal">NO</span>
+<span class="font-label-md text-label-md text-error font-bold">₦3,200 expected</span>
+</button>
+</div>
+<div class="flex items-center gap-xs mt-auto pt-md border-t border-border">
+<span class="material-symbols-outlined text-[18px] text-text-muted">payments</span>
+<span class="font-label-sm text-label-sm text-text-muted font-normal">Pool size: <span class="text-text-primary font-semibold">₦2.1M</span></span>
+</div>
+</div>
+</div>
+<div class="flex justify-center mt-xl">
+<button class="flex items-center gap-sm px-xl py-md border border-border rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors group font-medium">
+                    View All Active Markets
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="bg-surface-container-low py-xxl">
+<div class="max-w-container-max mx-auto px-lg flex flex-col md:flex-row items-center justify-between gap-xl">
+<div class="flex-1">
+<h2 class="font-headline-lg text-headline-lg text-text-primary mb-md font-bold">Ready to take your position?</h2>
+<p class="font-body-lg text-text-secondary font-normal">Join thousands of smart Nigerians predicting the future and earning rewards for their insights.</p>
+</div>
+<div class="flex gap-md">
+<button class="bg-primary-container text-on-primary-container px-xl py-md rounded-lg font-bold uppercase tracking-wide hover:brightness-110 active:scale-95 transition-all">
+                        Join NoCut Now
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl mt-auto border-t border-border bg-surface-container-lowest">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full px-lg max-w-container-max mx-auto gap-md">
+<div class="flex flex-col gap-sm">
+<div class="font-headline-sm text-headline-sm font-bold text-text-primary">NOCUT.NG</div>
+<p class="font-body-sm text-body-sm text-text-muted max-w-sm font-normal">
+                    © 2024 NOCUT.NG • Knowledge Market • Not gambling disclaimer: This is a professional prediction market for information discovery.
+                </p>
+</div>
+<div class="flex flex-wrap gap-lg">
+<a class="text-text-muted hover:text-on-surface hover:underline decoration-primary-container transition-colors font-label-sm text-label-sm font-normal" href="#">Privacy Policy</a>
+<a class="text-text-muted hover:text-on-surface hover:underline decoration-primary-container transition-colors font-label-sm text-label-sm font-normal" href="#">Terms of Service</a>
+<a class="text-text-muted hover:text-on-surface hover:underline decoration-primary-container transition-colors font-label-sm text-label-sm font-normal" href="#">FAQ</a>
+<a class="text-text-muted hover:text-on-surface hover:underline decoration-primary-container transition-colors font-label-sm text-label-sm font-normal" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>

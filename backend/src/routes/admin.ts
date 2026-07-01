@@ -277,6 +277,44 @@ router.get('/pl', ...guard, async (_req: Request, res: Response, next: NextFunct
   } catch (err) { next(err); }
 });
 
+// ─── GET /api/admin/stats ─────────────────────────────────────────────────────
+router.get('/stats', ...guard, async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const [marginRes, activeRes, usersRes, withdrawalsRes] = await Promise.all([
+      pool.query<{ monthly_margin: string }>(
+        `SELECT COALESCE(SUM(platform_margin), 0) AS monthly_margin
+         FROM settlements WHERE settled_at >= date_trunc('month', NOW())`
+      ),
+      pool.query<{ count: string }>(`SELECT COUNT(*) AS count FROM markets WHERE status = 'active'`),
+      pool.query<{ count: string }>(`SELECT COUNT(*) AS count FROM users`),
+      pool.query<{ count: string }>(`SELECT COUNT(*) AS count FROM withdrawal_requests WHERE status = 'pending'`),
+    ]);
+    res.json({
+      data: {
+        monthly_margin:      marginRes.rows[0].monthly_margin,
+        active_markets:      parseInt(activeRes.rows[0].count),
+        registered_users:    parseInt(usersRes.rows[0].count),
+        pending_withdrawals: parseInt(withdrawalsRes.rows[0].count),
+      },
+    });
+  } catch (err) { next(err); }
+});
+
+// ─── GET /api/admin/margin-history ────────────────────────────────────────────
+router.get('/margin-history', ...guard, async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { rows } = await pool.query<{ label: string; daily_margin: string }>(
+      `SELECT TO_CHAR(DATE(settled_at), 'Mon DD') AS label,
+              SUM(platform_margin) AS daily_margin
+       FROM settlements
+       WHERE settled_at >= NOW() - INTERVAL '30 days'
+       GROUP BY DATE(settled_at)
+       ORDER BY DATE(settled_at) ASC`
+    );
+    res.json({ data: { history: rows } });
+  } catch (err) { next(err); }
+});
+
 // ─── GET /api/admin/audit ─────────────────────────────────────────────────────
 router.get('/audit', ...guard, async (req: Request, res: Response, next: NextFunction) => {
   try {

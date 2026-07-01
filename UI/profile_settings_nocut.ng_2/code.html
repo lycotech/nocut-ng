@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Settings | NoCut.ng</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdad7",
+                        "on-secondary-container": "#00311f",
+                        "on-tertiary": "#68000a",
+                        "surface-container-high": "#232a36",
+                        "primary": "#10B981",
+                        "surface-container-low": "#151c27",
+                        "on-error": "#690005",
+                        "secondary": "#4edea3",
+                        "surface-variant": "#2e3541",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed": "#d1fae5",
+                        "on-secondary": "#003824",
+                        "on-surface-variant": "#bbcabf",
+                        "border": "rgba(255, 255, 255, 0.07)",
+                        "error-container": "#93000a",
+                        "surface-bright": "#323946",
+                        "text-muted": "#4B5563",
+                        "on-tertiary-fixed": "#410004",
+                        "on-secondary-fixed": "#002113",
+                        "on-background": "#dce2f3",
+                        "surface-dim": "#0c141f",
+                        "on-primary-container": "#003924",
+                        "secondary-container": "#00a572",
+                        "outline": "#8fa397",
+                        "on-tertiary-container": "#8d0012",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "text-secondary": "#6B7280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#19202b",
+                        "success": "#10B981",
+                        "tertiary-container": "#ff938c",
+                        "surface-tint": "#10B981",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-fixed": "#002113",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-container-lowest": "#070e19",
+                        "outline-variant": "#3f4d44",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "inverse-primary": "#006d4a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary-fixed-variant": "#005236",
+                        "inverse-surface": "#dce2f3",
+                        "on-surface": "#dce2f3",
+                        "input-surface": "#1F2937",
+                        "tertiary": "#ffbcb7",
+                        "text-primary": "#F0F2F8",
+                        "surface": "#111827",
+                        "surface-container-highest": "#2e3541",
+                        "error": "#EF4444",
+                        "background": "#0B0F1A",
+                        "inverse-on-surface": "#2a313d",
+                        "primary-fixed-dim": "#10B981",
+                        "primary-container": "#10B981"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "20px",
+                        "xs": "4px",
+                        "unit": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xxl": "64px",
+                        "xl": "40px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-tab {
+            border-bottom: 2px solid #10B981;
+            color: #10B981;
+        }
+        .toggle-checkbox:checked {
+            right: 0;
+            background-color: #10B981;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopNavBar -->
+<nav class="bg-background dark:bg-background w-full sticky top-0 z-50 border-b border-border dark:border-border flat no shadows">
+<div class="flex justify-between items-center h-16 px-gutter max-w-container-max mx-auto">
+<div class="flex items-center">
+<img alt="NoCut.ng Logo" class="h-8 w-auto" src="data:image/png;base64,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"/>
+</div>
+<div class="hidden md:flex items-center space-x-lg">
+<a class="text-text-primary dark:text-text-primary font-body-md text-body-md font-medium hover:text-primary transition-colors" href="#">Markets</a>
+<a class="text-text-primary dark:text-text-primary font-body-md text-body-md font-medium hover:text-primary transition-colors" href="#">Leaderboard</a>
+<a class="text-text-primary dark:text-text-primary font-body-md text-body-md font-medium hover:text-primary transition-colors" href="#">How it Works</a>
+<div class="h-6 w-px bg-border"></div>
+<button class="bg-primary-container text-white px-md py-xs rounded-lg font-label-md text-label-md font-bold hover:opacity-90 active:scale-95 transition-all">Connect Wallet</button>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-gutter py-xl">
+<!-- Profile Header -->
+<header class="flex flex-col md:flex-row items-center gap-xl mb-xxl p-lg bg-surface border border-border rounded-xl">
+<div class="relative w-32 h-32 rounded-full bg-primary-container flex items-center justify-center text-white font-headline-lg font-bold shadow-xl border-4 border-background">
+            AK
+            <div class="absolute bottom-1 right-1 bg-success text-white rounded-full p-1 border-4 border-surface" title="KYC Verified">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+</div>
+<div class="flex-grow text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-sm mb-xs">
+<h1 class="font-headline-lg text-headline-lg text-text-primary">Adebayo K.</h1>
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-success/10 text-success font-label-sm text-label-sm border border-success/20 font-semibold">
+<span class="material-symbols-outlined text-sm mr-1">verified_user</span> KYC Verified
+                </span>
+</div>
+<p class="font-body-md text-text-secondary mb-sm font-normal">adebayo.k@example.com</p>
+<div class="flex items-center justify-center md:justify-start gap-md text-text-muted font-label-sm font-normal">
+<span class="flex items-center"><span class="material-symbols-outlined text-sm mr-1">calendar_today</span> Member since June 2024</span>
+<span class="flex items-center"><span class="material-symbols-outlined text-sm mr-1">shield</span> Pro Trader Status</span>
+</div>
+</div>
+<div class="flex gap-md">
+<button class="px-lg py-sm border border-border text-text-primary rounded-lg font-label-md font-medium hover:bg-surface-variant transition-all">View Public Profile</button>
+</div>
+</header>
+<!-- Settings Interface -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl items-start">
+<!-- Tabs Navigation -->
+<div class="lg:col-span-3 space-y-md">
+<nav class="flex lg:flex-col overflow-x-auto lg:overflow-visible border-b lg:border-b-0 border-border lg:space-y-sm pb-md lg:pb-0">
+<button class="tab-btn active-tab lg:border-b-0 lg:border-l-4 lg:pl-md lg:py-sm flex items-center whitespace-nowrap px-lg py-md lg:rounded-r-lg lg:bg-primary/10" id="btn-profile" onclick="switchTab('profile')">
+<span class="material-symbols-outlined mr-sm">person</span>
+<span class="font-label-md font-medium">Profile</span>
+</button>
+<button class="tab-btn text-text-secondary lg:border-l-4 lg:border-transparent lg:pl-md lg:py-sm flex items-center whitespace-nowrap px-lg py-md hover:text-primary transition-all" id="btn-security" onclick="switchTab('security')">
+<span class="material-symbols-outlined mr-sm">security</span>
+<span class="font-label-md font-medium">Security</span>
+</button>
+<button class="tab-btn text-text-secondary lg:border-l-4 lg:border-transparent lg:pl-md lg:py-sm flex items-center whitespace-nowrap px-lg py-md hover:text-primary transition-all" id="btn-notifications" onclick="switchTab('notifications')">
+<span class="material-symbols-outlined mr-sm">notifications</span>
+<span class="font-label-md font-medium">Notifications</span>
+</button>
+<button class="tab-btn text-text-secondary lg:border-l-4 lg:border-transparent lg:pl-md lg:py-sm flex items-center whitespace-nowrap px-lg py-md hover:text-primary transition-all" id="btn-responsible-use" onclick="switchTab('responsible-use')">
+<span class="material-symbols-outlined mr-sm">health_and_safety</span>
+<span class="font-label-md font-medium">Responsible Use</span>
+</button>
+</nav>
+</div>
+<!-- Content Canvas -->
+<div class="lg:col-span-9 space-y-xl">
+<!-- Profile Tab -->
+<section class="tab-content animate-in fade-in duration-300" id="tab-profile">
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<h2 class="font-headline-sm text-headline-sm mb-xl flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined text-primary">person</span> Personal Information
+                    </h2>
+<form class="space-y-lg max-w-2xl" onsubmit="event.preventDefault()">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-sm text-text-secondary font-normal">Full Name</label>
+<input class="w-full bg-input-surface border border-border rounded-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-text-primary font-normal" type="text" value="Adebayo K."/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-sm text-text-secondary font-normal">Phone Number</label>
+<div class="flex">
+<span class="bg-surface-variant border border-r-0 border-border rounded-l-lg px-md py-sm flex items-center font-label-md text-text-muted font-normal">+234</span>
+<input class="w-full bg-input-surface border border-border rounded-r-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-text-primary font-normal" type="tel" value="8030000000"/>
+</div>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="font-label-sm text-text-secondary font-normal">Email Address</label>
+<input class="w-full bg-input-surface border border-border rounded-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-text-primary font-normal" readonly="" type="email" value="adebayo.k@example.com"/>
+<p class="text-xs text-text-muted mt-1 italic font-normal">Email cannot be changed after verification. Contact support for help.</p>
+</div>
+<div class="pt-md">
+<button class="bg-primary text-white font-label-md px-xl py-md rounded-lg font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase">Save Changes</button>
+</div>
+</form>
+</div>
+</section>
+<!-- Security Tab -->
+<section class="tab-content hidden animate-in fade-in duration-300" id="tab-security">
+<div class="space-y-xl">
+<!-- Password Card -->
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<h2 class="font-headline-sm text-headline-sm mb-xl flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined text-primary">lock</span> Change Password
+                        </h2>
+<form class="space-y-lg max-w-2xl" onsubmit="event.preventDefault()">
+<div class="space-y-xs">
+<label class="font-label-sm text-text-secondary font-normal">Current Password</label>
+<input class="w-full bg-input-surface border border-border rounded-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-normal" placeholder="••••••••" type="password"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="font-label-sm text-text-secondary font-normal">New Password</label>
+<input class="w-full bg-input-surface border border-border rounded-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-normal" placeholder="••••••••" type="password"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-sm text-text-secondary font-normal">Confirm Password</label>
+<input class="w-full bg-input-surface border border-border rounded-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-normal" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<button class="bg-primary text-white font-label-md px-xl py-md rounded-lg font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase">Update Password</button>
+</form>
+</div>
+<!-- 2FA Card -->
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline-sm text-headline-sm mb-sm flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">verified</span> Two-Factor Authentication
+                                </h2>
+<p class="font-body-sm text-text-secondary font-normal">Enhance your account security by requiring a verification code for all withdrawals and sensitive actions.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<!-- Sessions Card -->
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<h2 class="font-headline-sm text-headline-sm mb-xl flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined text-primary">devices</span> Active Sessions
+                        </h2>
+<div class="divide-y divide-border">
+<div class="py-md flex justify-between items-center">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-text-secondary text-3xl">laptop_mac</span>
+<div>
+<p class="font-label-md text-text-primary font-medium">MacBook Pro · Lagos, NG</p>
+<p class="text-xs text-success flex items-center font-normal"><span class="w-1.5 h-1.5 rounded-full bg-success mr-1.5"></span> Active Now</p>
+</div>
+</div>
+<span class="text-xs font-label-sm text-text-muted px-sm py-xs border border-border rounded font-normal">Current Device</span>
+</div>
+<div class="py-md flex justify-between items-center">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-text-secondary text-3xl">smartphone</span>
+<div>
+<p class="font-label-md text-text-primary font-medium">iPhone 15 · Lagos, NG</p>
+<p class="text-xs text-text-muted font-normal">Last active: 2 hours ago</p>
+</div>
+</div>
+<button class="text-error font-label-sm px-md py-xs border border-error/30 rounded hover:bg-error/10 transition-all font-medium">Revoke</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Notifications Tab -->
+<section class="tab-content hidden animate-in fade-in duration-300" id="tab-notifications">
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<h2 class="font-headline-sm text-headline-sm mb-xl flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined text-primary">notifications</span> Notification Preferences
+                    </h2>
+<div class="space-y-xl divide-y divide-border">
+<div class="flex items-center justify-between pt-xl first:pt-0">
+<div class="max-w-md">
+<p class="font-body-md text-text-primary font-medium">Market closes soon</p>
+<p class="font-body-sm text-text-secondary font-normal">Get notified 1 hour before a market you've entered is about to close.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between pt-xl">
+<div class="max-w-md">
+<p class="font-body-md text-text-primary font-medium">New market in my categories</p>
+<p class="font-body-sm text-text-secondary font-normal">Notification when new opportunities arise in your favorite categories.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between pt-xl">
+<div class="max-w-md">
+<p class="font-body-md text-text-primary font-medium">Payout credited</p>
+<p class="font-body-sm text-text-secondary font-normal">Instant notification when a market result is confirmed and your wallet is credited.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between pt-xl">
+<div class="max-w-md">
+<p class="font-body-md text-text-primary font-medium">Weekly leaderboard update</p>
+<p class="font-body-sm text-text-secondary font-normal">A summary of your performance and standing in the community.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Responsible Use Tab -->
+<section class="tab-content hidden animate-in fade-in duration-300" id="tab-responsible-use">
+<div class="space-y-xl">
+<div class="bg-primary/10 border border-primary/30 rounded-xl p-xl shadow-lg">
+<div class="flex items-center gap-md mb-md">
+<span class="material-symbols-outlined text-primary text-4xl">health_and_safety</span>
+<h2 class="font-headline-sm text-headline-sm font-semibold">Responsible Use</h2>
+</div>
+<p class="font-body-lg text-text-primary max-w-2xl font-normal">
+                            Your wellbeing matters. At NoCut.ng, we believe prediction markets should be analytical and controlled. You can pause your account or set limits at any time.
+                        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+<!-- Daily Stake Limit -->
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<h3 class="font-label-md text-primary mb-md flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined">analytics</span> Daily Stake Limit
+                            </h3>
+<div class="bg-input-surface p-lg rounded-lg border border-border mb-lg">
+<p class="font-label-sm text-text-secondary mb-xs font-normal">Current Limit</p>
+<p class="font-headline-md font-medium text-text-primary">₦50,000 / day</p>
+</div>
+<button class="w-full py-md border border-primary text-primary font-label-md font-bold rounded-lg hover:bg-primary/10 transition-all uppercase">Edit Limit</button>
+</div>
+<!-- Self-Exclusion -->
+<div class="bg-surface border border-border rounded-xl p-xl shadow-lg">
+<h3 class="font-label-md text-primary mb-md flex items-center gap-sm font-semibold">
+<span class="material-symbols-outlined">timer_off</span> Self-Exclusion
+                            </h3>
+<div class="space-y-md mb-lg">
+<p class="font-body-sm text-text-secondary leading-relaxed font-normal">Temporarily disable your ability to place bets. This action cannot be undone until the period expires.</p>
+<div class="relative">
+<select class="w-full bg-input-surface border border-border rounded-lg px-md py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none font-body-sm text-text-primary font-normal">
+<option>Select duration...</option>
+<option>1 week</option>
+<option>1 month</option>
+<option>3 months</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-text-muted pointer-events-none">expand_more</span>
+</div>
+</div>
+<button class="w-full py-md bg-primary text-white font-label-md font-bold rounded-lg hover:brightness-110 active:scale-95 transition-all uppercase">Activate Cooling-Off Period</button>
+</div>
+</div>
+<div class="bg-surface border border-border rounded-xl p-xl flex items-start gap-md">
+<span class="material-symbols-outlined text-primary">info</span>
+<div class="font-body-sm text-text-secondary font-normal">
+<p>Self-exclusion is a formal process. Once activated, you will not be able to log in or place trades. All remaining balances will remain secure but inaccessible until the period ends.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<footer class="w-full py-xl mt-xxl border-t border-border dark:border-border bg-background dark:bg-background flat no shadows">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center">
+<div class="mb-md md:mb-0">
+<img alt="NoCut.ng Logo" class="h-6 w-auto" src="data:image/png;base64,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"/>
+</div>
+<div class="flex flex-wrap justify-center gap-lg mb-md md:mb-0">
+<a class="font-label-sm text-label-sm font-normal text-text-muted hover:text-text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm font-normal text-text-muted hover:text-text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm font-normal text-text-muted hover:text-text-primary transition-colors" href="#">Contact Support</a>
+<a class="font-label-sm text-label-sm font-normal text-text-muted hover:text-text-primary transition-colors" href="#">Risk Disclosure</a>
+</div>
+<div class="font-body-sm text-body-sm font-normal text-text-muted">© 2024 NoCut.ng. Professional Prediction Markets.</div>
+</div>
+</footer>
+<script>
+    function switchTab(tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.add('hidden'));
+
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('active-tab', 'lg:bg-primary/10', 'lg:border-primary');
+            btn.classList.add('text-text-secondary');
+            btn.classList.remove('text-primary');
+            btn.classList.add('lg:border-transparent');
+        });
+
+        document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+        const activeBtn = document.getElementById('btn-' + tabId);
+        activeBtn.classList.add('active-tab');
+        activeBtn.classList.remove('text-text-secondary');
+        activeBtn.classList.add('text-primary');
+        
+        activeBtn.classList.add('lg:bg-primary/10');
+        activeBtn.classList.remove('lg:border-transparent');
+        activeBtn.classList.add('lg:border-primary');
+        
+        if (window.innerWidth < 1024) {
+            activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+        }
+    }
+</script>
+</body></html>

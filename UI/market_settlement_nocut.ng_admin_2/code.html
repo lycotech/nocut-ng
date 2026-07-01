@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settle Market | NoCut.ng Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0B0F1A;
+            color: #dce2f3;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .selected-glow {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#EF4444",
+                      "tertiary-container": "#ff938c",
+                      "inverse-surface": "#dce2f3",
+                      "primary-fixed-dim": "#ffb95f",
+                      "input-surface": "#1F2937",
+                      "on-secondary-fixed": "#002113",
+                      "inverse-on-surface": "#2a313d",
+                      "text-secondary": "#6B7280",
+                      "border": "rgba(255, 255, 255, 0.07)",
+                      "primary": "#10B981",
+                      "text-primary": "#F0F2F8",
+                      "tertiary-fixed-dim": "#ffb3ad",
+                      "on-surface": "#dce2f3",
+                      "on-secondary-fixed-variant": "#005236",
+                      "surface-tint": "#10B981",
+                      "surface-container-low": "#151c27",
+                      "on-primary-container": "#002113",
+                      "primary-container": "#10B981",
+                      "surface-container-high": "#232a36",
+                      "text-muted": "#4B5563",
+                      "on-error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#4edea3",
+                      "on-primary-fixed": "#002113",
+                      "tertiary-fixed": "#ffdad7",
+                      "secondary": "#4edea3",
+                      "on-error": "#690005",
+                      "inverse-primary": "#855300",
+                      "secondary-container": "#00a572",
+                      "outline-variant": "#534434",
+                      "error-container": "#93000a",
+                      "surface-container-highest": "#2e3541",
+                      "surface-dim": "#0c141f",
+                      "on-secondary": "#003824",
+                      "on-tertiary-fixed-variant": "#930013",
+                      "on-background": "#dce2f3",
+                      "surface": "#111827",
+                      "tertiary": "#ffbcb7",
+                      "surface-container-lowest": "#070e19",
+                      "primary-fixed": "#6ffbbe",
+                      "outline": "#a08e7a",
+                      "surface-bright": "#323946",
+                      "success": "#10B981",
+                      "on-tertiary-container": "#8d0012",
+                      "on-tertiary": "#68000a",
+                      "background": "#0B0F1A",
+                      "on-secondary-container": "#00311f",
+                      "on-tertiary-fixed": "#410004",
+                      "on-primary-fixed-variant": "#005236",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#2e3541",
+                      "surface-container": "#19202b",
+                      "secondary-fixed": "#6ffbbe",
+                      "on-surface-variant": "#d8c3ad"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "gutter": "20px",
+                      "sm": "8px",
+                      "xxl": "64px",
+                      "unit": "4px",
+                      "xs": "4px",
+                      "xl": "40px",
+                      "md": "16px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="flex min-h-screen overflow-hidden font-body-md">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-full py-lg px-md bg-surface-container-low dark:bg-surface-container-low h-screen w-64 border-r border-border shrink-0">
+<div class="mb-xl">
+<img alt="NoCut.ng Logo" class="h-10 w-auto mb-2" src="data:image/png;base64,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"/>
+<p class="font-medium text-label-md text-on-surface-variant">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-unit">
+<a class="flex items-center gap-md p-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-md p-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">storefront</span> Markets
+            </a>
+<a class="flex items-center gap-md p-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">group</span> Users
+            </a>
+<a class="flex items-center gap-md p-sm rounded-lg text-primary dark:text-primary font-semibold border-r-2 border-primary hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">handshake</span> Settlements
+            </a>
+<a class="flex items-center gap-md p-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">payments</span> Withdrawals
+            </a>
+<a class="flex items-center gap-md p-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">receipt_long</span> Audit Log
+            </a>
+<a class="flex items-center gap-md p-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 transition-transform font-medium text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+</nav>
+<div class="mt-auto pt-lg border-t border-border flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="Admin User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOrepF740N7rD8YlIQTVg8OetjS4a_oRh4-geiEv7ZPo9nfsb-JfFcVDjY-_T86Sbx_rtXJTOFLDIfABSzNn2wVHUOGFER1n5-wh8U3NaFNLQW_DWvTQBq7VL6JlwoT8U0fedH3XjHDWyKnhS87lN4IKDGQsfZpWt4DiSsSEJPbBcqQaynbxZlAuh4foDi0uG_B_qeUSSKB9Sp5SG5t5EUwggkXxvWsSJ_auv0F0TehB7GtvhyHsrq2UrEwfO5BRhfG3FNzMAclNyL"/>
+</div>
+<div>
+<p class="text-label-md font-bold text-on-surface">Admin User</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-normal">Superuser</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto bg-background">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-lg w-full h-16 border-b border-border sticky top-0 z-50 bg-surface dark:bg-surface shrink-0">
+<div class="flex items-center gap-lg">
+<h2 class="text-headline-sm font-semibold text-primary dark:text-primary">Settle Market</h2>
+<div class="hidden md:flex items-center gap-sm bg-input-surface px-md py-xs rounded-lg border border-border">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64 text-on-surface placeholder-on-surface-variant font-normal" placeholder="Search markets..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer">account_circle</button>
+</div>
+</header>
+<div class="p-lg max-w-5xl mx-auto w-full space-y-lg">
+<!-- Header Section -->
+<section>
+<nav class="flex items-center gap-xs text-on-surface-variant text-label-sm font-normal mb-sm">
+<span>Admin</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span>Settlements</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary-container font-semibold">Market #2024</span>
+</nav>
+<h3 class="text-headline-lg text-primary-container font-bold">
+                    Will Super Eagles qualify for 2026 World Cup?
+                </h3>
+</section>
+<!-- Market Summary Card -->
+<section class="bg-surface-container-low border border-border p-lg rounded-xl">
+<div class="flex justify-between items-center mb-lg">
+<h4 class="text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Market Overview</h4>
+<span class="px-md py-1 bg-primary-container/20 text-primary-container border border-primary-container/30 rounded-full text-label-sm font-bold flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                        CLOSED — Awaiting Resolution
+                    </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="space-y-sm">
+<div class="p-md bg-background/50 rounded-lg border border-border">
+<p class="text-label-sm text-on-surface-variant font-normal">Reward Pool</p>
+<p class="text-headline-sm font-bold">₦200,000</p>
+</div>
+<div class="p-md bg-background/50 rounded-lg border border-border">
+<p class="text-label-sm text-on-surface-variant font-normal">Total Staked (T)</p>
+<p class="text-headline-sm font-bold">₦241,500</p>
+</div>
+</div>
+<div class="p-md bg-success/5 rounded-lg border border-success/20 flex flex-col justify-center">
+<p class="text-label-sm text-on-surface-variant font-normal">Platform Profit</p>
+<p class="text-display-lg text-success font-bold">₦41,500</p>
+<p class="text-[10px] text-success/60 uppercase font-bold tracking-tighter">17.2% Commission applied</p>
+</div>
+<div class="space-y-sm">
+<div class="p-md bg-success/10 rounded-lg border border-success/30">
+<div class="flex justify-between items-center mb-xs">
+<p class="text-label-sm text-success font-bold uppercase">YES Stakes</p>
+<p class="text-[10px] text-on-surface-variant font-normal">412 users</p>
+</div>
+<p class="text-headline-sm font-bold text-success">₦153,200</p>
+</div>
+<div class="p-md bg-error/10 rounded-lg border border-error/30">
+<div class="flex justify-between items-center mb-xs">
+<p class="text-label-sm text-error font-bold uppercase">NO Stakes</p>
+<p class="text-[10px] text-on-surface-variant font-normal">267 users</p>
+</div>
+<p class="text-headline-sm font-bold text-error">₦88,300</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Resolution Selector -->
+<section class="border-2 border-primary-container p-lg rounded-xl bg-surface/30 relative">
+<div class="absolute -top-3 left-6 bg-primary-container px-sm py-1 rounded text-[10px] font-bold text-on-primary uppercase tracking-widest">Required Selection</div>
+<h4 class="text-headline-sm font-semibold mb-lg">Select the winning outcome</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- YES Option -->
+<button class="group relative flex flex-col items-center justify-center p-xl border-2 border-success/30 bg-success/5 hover:bg-success/10 rounded-xl transition-all selected-glow ring-2 ring-primary ring-offset-4 ring-offset-background" id="btnYes" onclick="selectOption('yes')">
+<span class="absolute top-4 right-4 material-symbols-outlined text-success font-bold" id="checkYes">check_circle</span>
+<span class="material-symbols-outlined text-[48px] text-success mb-md" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<p class="text-headline-sm text-success font-bold text-center">YES — Super Eagles qualified</p>
+<p class="text-label-sm text-success/60 mt-sm font-normal">Resolution payouts: ₦200,000</p>
+</button>
+<!-- NO Option -->
+<button class="group relative flex flex-col items-center justify-center p-xl border border-error/20 bg-error/5 hover:bg-error/10 rounded-xl transition-all opacity-50 grayscale hover:grayscale-0" id="btnNo" onclick="selectOption('no')">
+<span class="hidden absolute top-4 right-4 material-symbols-outlined text-error font-bold" id="checkNo">check_circle</span>
+<span class="material-symbols-outlined text-[48px] text-error mb-md">cancel</span>
+<p class="text-headline-sm text-error font-bold text-center">NO — Super Eagles did not qualify</p>
+<p class="text-label-sm text-error/60 mt-sm font-normal">Resolution payouts: ₦200,000</p>
+</button>
+</div>
+</section>
+<!-- Settlement Preview -->
+<section class="bg-surface-bright p-lg rounded-xl border border-border">
+<div class="flex items-start gap-md mb-lg">
+<div class="w-12 h-12 bg-primary-container/10 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary-container">analytics</span>
+</div>
+<div>
+<h4 class="text-label-md font-bold text-on-surface">Distribution Summary</h4>
+<div class="flex gap-xl mt-sm">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Winners</p>
+<p class="text-label-md font-semibold" id="winnerCount">412 users</p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Payout Rate (Multiplier)</p>
+<p class="text-label-md font-semibold text-primary" id="payoutMultiplier">₦1,305.48 per ₦1,000</p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Total Distribution</p>
+<p class="text-label-md font-semibold">₦200,000</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-error/10 border border-error/20 text-error p-md rounded-lg flex gap-md items-center">
+<span class="material-symbols-outlined">warning</span>
+<p class="text-label-md font-normal"><strong class="font-bold">⚠️ This action is irreversible.</strong> Payouts will be credited instantly to all winner wallets and cannot be clawed back once confirmed.</p>
+</div>
+</section>
+<!-- Audit Section -->
+<section class="space-y-md">
+<div>
+<label class="block text-label-md font-bold text-on-surface mb-xs">Admin resolution note (required)</label>
+<textarea class="w-full bg-input-surface border border-border rounded-lg p-md text-sm focus:ring-primary focus:border-primary transition-all text-on-surface font-normal" placeholder="Enter resolution source or reasoning for audit trail..." rows="3"></textarea>
+</div>
+<div class="pt-md">
+<label class="block text-label-md font-bold text-on-surface mb-xs">Type market title to confirm</label>
+<input class="w-full bg-input-surface border border-border rounded-lg p-md text-sm focus:ring-primary focus:border-primary transition-all text-on-surface font-normal" id="confirmTitle" placeholder="Will Super Eagles qualify for 2026 World Cup?" type="text"/>
+<p class="text-[10px] text-on-surface-variant mt-sm font-normal">Double-check the selection before typing the market title.</p>
+</div>
+</section>
+<!-- Confirmation Button -->
+<button class="w-full py-lg bg-primary-container text-on-primary text-headline-sm font-bold rounded-xl active:scale-[0.98] transition-all hover:brightness-110 shadow-xl shadow-primary-container/10">
+                Confirm &amp; Settle Market
+            </button>
+<div class="h-10"></div>
+</div>
+</main>
+<script>
+        function selectOption(option) {
+            const btnYes = document.getElementById('btnYes');
+            const btnNo = document.getElementById('btnNo');
+            const checkYes = document.getElementById('checkYes');
+            const checkNo = document.getElementById('checkNo');
+            const winnerCount = document.getElementById('winnerCount');
+            const payoutMultiplier = document.getElementById('payoutMultiplier');
+
+            if (option === 'yes') {
+                btnYes.classList.add('selected-glow', 'ring-2', 'ring-primary', 'ring-offset-4', 'ring-offset-background', 'border-success/30');
+                btnYes.classList.remove('opacity-50', 'grayscale', 'border-border');
+                checkYes.classList.remove('hidden');
+
+                btnNo.classList.add('opacity-50', 'grayscale', 'border-border');
+                btnNo.classList.remove('selected-glow', 'ring-2', 'ring-primary', 'ring-offset-4', 'ring-offset-background', 'border-error/30');
+                checkNo.classList.add('hidden');
+
+                winnerCount.innerText = "412 users";
+                payoutMultiplier.innerText = "₦1,305.48 per ₦1,000";
+            } else {
+                btnNo.classList.add('selected-glow', 'ring-2', 'ring-primary', 'ring-offset-4', 'ring-offset-background', 'border-error/30');
+                btnNo.classList.remove('opacity-50', 'grayscale', 'border-border');
+                checkNo.classList.remove('hidden');
+
+                btnYes.classList.add('opacity-50', 'grayscale', 'border-border');
+                btnYes.classList.remove('selected-glow', 'ring-2', 'ring-primary', 'ring-offset-4', 'ring-offset-background', 'border-success/30');
+                checkYes.classList.add('hidden');
+
+                winnerCount.innerText = "267 users";
+                payoutMultiplier.innerText = "₦2,265.00 per ₦1,000";
+            }
+        }
+    </script>
+</body></html>

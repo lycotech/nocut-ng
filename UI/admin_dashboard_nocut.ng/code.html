@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NoCut.ng Admin Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "secondary": "#4edea3",
+                        "success": "#10B981",
+                        "surface-container-high": "#232a36",
+                        "primary-fixed": "#ffddb8",
+                        "surface-container-lowest": "#070e19",
+                        "text-secondary": "#6B7280",
+                        "surface-container-low": "#151c27",
+                        "text-muted": "#4B5563",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-tertiary-fixed": "#410004",
+                        "primary": "#10B981",
+                        "on-surface-variant": "#d8c3ad",
+                        "text-primary": "#F0F2F8",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-surface": "#dce2f3",
+                        "on-background": "#dce2f3",
+                        "secondary-container": "#00a572",
+                        "surface-variant": "#2e3541",
+                        "surface-bright": "#323946",
+                        "inverse-primary": "#855300",
+                        "on-secondary-fixed-variant": "#005236",
+                        "outline": "#a08e7a",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "surface-dim": "#0c141f",
+                        "secondary-fixed": "#6ffbbe",
+                        "error": "#EF4444",
+                        "primary-container": "#10B981",
+                        "on-tertiary": "#68000a",
+                        "on-secondary": "#003824",
+                        "surface-tint": "#10B981",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#2e3541",
+                        "on-primary-fixed": "#ffffff",
+                        "on-primary-fixed-variant": "#00422b",
+                        "surface": "#111827",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary": "#ffbcb7",
+                        "surface-container": "#19202b",
+                        "primary-fixed-dim": "#10B981",
+                        "tertiary-container": "#ff938c",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#2a313d",
+                        "on-tertiary-container": "#8d0012",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#534434",
+                        "input-surface": "#1F2937",
+                        "on-error": "#690005",
+                        "border": "rgba(255, 255, 255, 0.07)",
+                        "on-primary-container": "#00422b",
+                        "background": "#0B0F1A",
+                        "inverse-surface": "#dce2f3",
+                        "on-secondary-container": "#00311f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "md": "16px",
+                        "container-max": "1280px",
+                        "xxl": "64px",
+                        "unit": "4px",
+                        "gutter": "20px",
+                        "xs": "4px",
+                        "xl": "40px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 100%);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0B0F1A; }
+        ::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2e3541; }
+        
+        /* Global Font Weights based on Inter */
+        body { font-family: 'Inter', sans-serif; font-weight: 400; }
+        h1, h2 { font-weight: 700; }
+        h3, h4 { font-weight: 600; }
+        .font-medium-ui { font-weight: 500; }
+        .font-semibold-ui { font-weight: 600; }
+        .font-bold-ui { font-weight: 700; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="flex flex-col h-full py-lg px-md bg-surface-container-low border-r border-border h-screen w-64 shrink-0">
+<div class="mb-xl">
+<img alt="Emerald NoCut.ng Logo" class="h-8 w-auto mb-xs" src="data:image/png;base64,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"/>
+<p class="text-[10px] uppercase tracking-widest text-text-muted font-normal">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-sm overflow-y-auto">
+<!-- Dashboard (Active) -->
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-primary font-bold border-r-2 border-primary bg-primary/10" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 font-normal" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="text-label-md">Markets</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 font-normal" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md">Users</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 font-normal" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="text-label-md">Settlements</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 font-normal" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-md">Withdrawals</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 font-normal" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-label-md">Audit Log</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/10 font-normal" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md">Settings</span>
+</a>
+</nav>
+<button class="w-full bg-primary text-on-primary font-bold py-sm rounded-lg mb-lg hover:brightness-110 active:scale-95 transition-all">
+                New Market
+            </button>
+<div class="pt-lg border-t border-border flex items-center gap-md">
+<img alt="Admin User" class="w-10 h-10 rounded-full border border-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9PTpQlOAea83X4QhefPmYZ5ogFr7FzDjHcdw8Jdtw8DZKlfR-x0FC-AKOAwG8dMj178ZCnEXuBTg6MnvOjPxWQXvR9D8ylPxfxaODCAu9R42dnZwsSjTpTVuGJUGaEDGSFR0MDtbh20N_Itq-2Hnobh5UzOmQU3x2EtNEsx89y6RfbB8xC1bIp1HgJ88beUX7mcCC9p7MlaPhJ2ZQRz1tCKA7Qo5WvnHgLtS7EEHJ49KhVOVdG4xyYzp_9-UgUPxhsoPRCqQjsxW1"/>
+<div class="overflow-hidden">
+<p class="text-label-md font-semibold truncate">Admin User</p>
+<span class="inline-block px-xs py-[2px] bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold rounded uppercase">Admin Panel</span>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center px-lg w-full h-16 bg-surface border-b border-border sticky top-0 z-50 shrink-0">
+<div class="flex items-center gap-lg">
+<h2 class="text-headline-sm text-on-surface font-semibold">Admin Dashboard</h2>
+<div class="hidden md:flex items-center gap-sm text-text-muted border-l border-border pl-lg">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="text-label-sm font-normal" id="currentDate">October 24, 2023</span>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="relative cursor-pointer group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">notifications</span>
+<span class="absolute -top-1 -right-1 w-4 h-4 bg-error text-white text-[10px] flex items-center justify-center rounded-full border-2 border-surface font-bold">3</span>
+<!-- Notification Dropdown Preview -->
+<div class="absolute right-0 mt-2 w-64 bg-surface-container border border-border shadow-2xl rounded-xl p-md hidden group-hover:block z-50">
+<p class="text-label-sm text-error mb-xs font-bold">3 pending withdrawals</p>
+<p class="text-[12px] text-on-surface-variant font-normal">Requires immediate authorization</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-lg space-y-xl">
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface border border-border p-lg rounded-xl hover:border-white/20 transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="text-text-muted text-label-sm font-normal">Total Pool Revenue</span>
+<span class="material-symbols-outlined text-primary">payments</span>
+</div>
+<h3 class="text-headline-md text-on-surface font-semibold">₦840,000</h3>
+<p class="text-success text-[12px] mt-xs flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +12.5% this month
+                        </p>
+</div>
+<div class="bg-surface border border-border p-lg rounded-xl hover:border-white/20 transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="text-text-muted text-label-sm font-normal">Active Markets</span>
+<span class="material-symbols-outlined text-secondary">analytics</span>
+</div>
+<h3 class="text-headline-md text-on-surface font-semibold">12</h3>
+<p class="text-on-surface-variant text-[12px] mt-xs font-normal">Across 4 categories</p>
+</div>
+<div class="bg-surface border border-border p-lg rounded-xl hover:border-white/20 transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="text-text-muted text-label-sm font-normal">Registered Users</span>
+<span class="material-symbols-outlined text-on-surface-variant">group</span>
+</div>
+<h3 class="text-headline-md text-on-surface font-semibold">1,247</h3>
+<p class="text-success text-[12px] mt-xs font-medium">+42 today</p>
+</div>
+<div class="bg-surface border border-primary/30 p-lg rounded-xl bg-primary/5 hover:bg-primary/10 transition-all">
+<div class="flex justify-between items-start mb-md">
+<span class="text-primary font-bold text-label-sm">Pending Withdrawals</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<h3 class="text-headline-md text-on-surface font-semibold">8</h3>
+<p class="text-primary text-[12px] mt-xs font-bold animate-pulse">Action Required</p>
+</div>
+</div>
+<!-- Middle Row: Chart & Activity Feed -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Revenue Chart Area -->
+<div class="lg:col-span-2 bg-surface border border-border rounded-xl p-lg">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h4 class="text-headline-sm font-semibold">Daily Pool Margin</h4>
+<p class="text-text-muted text-body-sm font-normal">Last 30 days revenue flow</p>
+</div>
+<select class="bg-surface-container-high border-border text-on-surface text-label-sm rounded-lg px-md py-xs focus:ring-primary font-medium">
+<option>Last 30 Days</option>
+<option>Last 90 Days</option>
+</select>
+</div>
+<!-- Simulated Chart Grid -->
+<div class="h-64 w-full relative flex items-end gap-1">
+<div class="absolute inset-0 grid grid-rows-4 pointer-events-none">
+<div class="border-b border-white/5 w-full"></div>
+<div class="border-b border-white/5 w-full"></div>
+<div class="border-b border-white/5 w-full"></div>
+<div class="border-b border-white/5 w-full"></div>
+</div>
+<!-- Mock Data Bars -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 45%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 52%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 48%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 65%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 72%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 58%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 45%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 38%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 55%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 60%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 85%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 92%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 80%;"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-all rounded-t-sm" style="height: 75%;"></div>
+<div class="flex-1 bg-primary rounded-t-sm" style="height: 98%;"></div>
+</div>
+<div class="flex justify-between mt-md text-text-muted text-label-sm font-normal">
+<span>Oct 01</span>
+<span>Oct 15</span>
+<span>Today</span>
+</div>
+</div>
+<!-- Activity Feed -->
+<div class="bg-surface border border-border rounded-xl p-lg flex flex-col">
+<h4 class="text-headline-sm font-semibold mb-lg">Recent Activity</h4>
+<div class="flex-1 overflow-y-auto space-y-md pr-sm">
+<!-- Activity Item -->
+<div class="flex gap-md group">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-primary">add_circle</span>
+</div>
+<div class="border-b border-border pb-sm flex-1">
+<p class="text-body-sm font-normal"><span class="font-semibold">Market Created:</span> 2024 Election Volatility</p>
+<p class="text-[11px] text-text-muted font-normal">2 mins ago • by Admin_04</p>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-primary">payments</span>
+</div>
+<div class="border-b border-border pb-sm flex-1">
+<p class="text-body-sm font-normal"><span class="font-semibold">User Staked:</span> ₦50,000 on 'YES' - Crypto Bulls</p>
+<p class="text-[11px] text-text-muted font-normal">15 mins ago • User_992</p>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-primary">lock_clock</span>
+</div>
+<div class="border-b border-border pb-sm flex-1">
+<p class="text-body-sm font-normal"><span class="font-semibold">Market Closed:</span> Lagos Tech Summit Outcome</p>
+<p class="text-[11px] text-text-muted font-normal">1 hour ago • Auto-close</p>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-primary">gavel</span>
+</div>
+<div class="border-b border-border pb-sm flex-1">
+<p class="text-body-sm font-normal"><span class="font-semibold">Settlement Triggered:</span> AFCON Winners</p>
+<p class="text-[11px] text-text-muted font-normal">3 hours ago • Manual Review</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Active Markets Table -->
+<div class="bg-surface border border-border rounded-xl overflow-hidden">
+<div class="p-lg border-b border-border flex justify-between items-center">
+<div>
+<h4 class="text-headline-sm font-semibold">Active Markets Management</h4>
+<p class="text-text-muted text-body-sm font-normal">Real-time trading status and liquidity</p>
+</div>
+<div class="flex gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-text-muted text-[20px]">search</span>
+<input class="bg-input-surface border-border text-on-surface pl-xl pr-md py-xs rounded-lg text-body-sm w-64 focus:ring-primary focus:border-primary font-normal" placeholder="Search markets..." type="text"/>
+</div>
+<button class="flex items-center gap-sm px-md py-xs border border-border rounded-lg text-label-sm font-medium hover:bg-surface-variant/20">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                                Filter
+                            </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low text-text-muted text-label-sm uppercase tracking-wider font-semibold">
+<th class="px-lg py-md">Title</th>
+<th class="px-lg py-md">Category</th>
+<th class="px-lg py-md">Reward Pool</th>
+<th class="px-lg py-md">YES Stakes</th>
+<th class="px-lg py-md">NO Stakes</th>
+<th class="px-lg py-md">Fill %</th>
+<th class="px-lg py-md">Status</th>
+<th class="px-lg py-md text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border">
+<tr class="hover:bg-surface-variant/5 transition-colors">
+<td class="px-lg py-md font-medium text-on-surface">Will BTC hit $100k by year end?</td>
+<td class="px-lg py-md"><span class="px-md py-xs bg-primary/10 text-primary rounded-full text-[10px] font-bold">CRYPTO</span></td>
+<td class="px-lg py-md font-medium">₦4,200,000</td>
+<td class="px-lg py-md text-success font-medium">₦3.1M</td>
+<td class="px-lg py-md text-error font-medium">₦1.1M</td>
+<td class="px-lg py-md">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 70%"></div>
+<div class="h-full bg-error" style="width: 30%"></div>
+</div>
+</td>
+<td class="px-lg py-md"><span class="flex items-center gap-2 text-success font-bold text-[11px]"><span class="w-2 h-2 rounded-full bg-success animate-pulse"></span> ACTIVE</span></td>
+<td class="px-lg py-md text-right">
+<button class="text-primary hover:underline text-label-sm font-bold">Manage</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/5 transition-colors">
+<td class="px-lg py-md font-medium text-on-surface">Tinubu to reshuffle cabinet by Nov?</td>
+<td class="px-lg py-md"><span class="px-md py-xs bg-primary/10 text-primary rounded-full text-[10px] font-bold">POLITICS</span></td>
+<td class="px-lg py-md font-medium">₦1,500,000</td>
+<td class="px-lg py-md text-success font-medium">₦850K</td>
+<td class="px-lg py-md text-error font-medium">₦650K</td>
+<td class="px-lg py-md">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 55%"></div>
+<div class="h-full bg-error" style="width: 45%"></div>
+</div>
+</td>
+<td class="px-lg py-md"><span class="px-md py-xs bg-primary/20 text-primary rounded-full text-[10px] font-bold">CLOSED</span></td>
+<td class="px-lg py-md text-right">
+<button class="bg-primary text-on-primary px-md py-xs rounded font-bold text-label-sm active:scale-95 transition-transform">Resolve</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/5 transition-colors">
+<td class="px-lg py-md font-medium text-on-surface">Super Eagles to win next AFCON?</td>
+<td class="px-lg py-md"><span class="px-md py-xs bg-primary/10 text-primary rounded-full text-[10px] font-bold">SPORTS</span></td>
+<td class="px-lg py-md font-medium">₦12,800,000</td>
+<td class="px-lg py-md text-success font-medium">₦7.2M</td>
+<td class="px-lg py-md text-error font-medium">₦5.6M</td>
+<td class="px-lg py-md">
+<div class="w-24 h-2 bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-success" style="width: 56%"></div>
+<div class="h-full bg-error" style="width: 44%"></div>
+</div>
+</td>
+<td class="px-lg py-md"><span class="px-md py-xs bg-surface-container-highest text-text-muted rounded-full text-[10px] font-bold">SETTLED</span></td>
+<td class="px-lg py-md text-right">
+<button class="text-text-muted text-label-sm font-bold opacity-50 cursor-not-allowed">View Stats</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateSpan = document.getElementById('currentDate');
+        if (dateSpan) {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            dateSpan.textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        const navItems = document.querySelectorAll('nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => {
+                    i.classList.remove('text-primary', 'font-bold', 'border-r-2', 'border-primary', 'bg-primary/10');
+                    i.classList.add('text-on-surface-variant', 'font-normal');
+                });
+                
+                item.classList.add('text-primary', 'font-bold', 'border-r-2', 'border-primary', 'bg-primary/10');
+                item.classList.remove('text-on-surface-variant', 'font-normal');
+            });
+        });
+    });
+</script>
+</body></html>

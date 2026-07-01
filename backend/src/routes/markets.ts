@@ -200,13 +200,10 @@ function enrichMarket(m: Market) {
 
   return {
     ...m,
-    // Computed display fields — never stored in DB
     yes_pct:          yesPct(totalYes, totalNo).toFixed(1),
     no_pct:           (100 - yesPct(totalYes, totalNo)).toFixed(1),
     pool_fill_pct:    poolFillPercent(totalYes + totalNo, rewardPool).toFixed(1),
-    yes_expected_payout: expectedPayout(1000, totalYes, rewardPool).toFixed(2),  // preview for ₦1k stake
+    yes_expected_payout: expectedPayout(1000, totalYes, rewardPool).toFixed(2),
     no_expected_payout:  expectedPayout(1000, totalNo,  rewardPool).toFixed(2),
   };
 }
-
-export default router;
